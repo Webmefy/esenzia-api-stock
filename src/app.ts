@@ -1,15 +1,16 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParserMiddleware from './middlewares/bodyparser.middleware';
-import router from './routes/index';
+import { requestLogger } from './middlewares/logger.middleware';
+import router from './routes';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
 app.use(bodyParserMiddleware);
+app.use(requestLogger);
 
 app.use('/api', router);
 
