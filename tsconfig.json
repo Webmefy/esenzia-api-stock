@@ -10,11 +10,11 @@
     "rootDir": "./src",
   },
   "include": [
-    "./src/**/*", "types",
+    "./src/**/*",
+    "types",
   ],
   "files": [
     "types/express.d.ts",
     "types/axios.d.ts",
-
   ]
 }

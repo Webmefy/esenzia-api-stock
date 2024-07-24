@@ -7,4 +7,4 @@ const bodyParserMiddleware = bodyParser.json({
     },
 });
 
-export default bodyParserMiddleware
+export default bodyParserMiddleware;
