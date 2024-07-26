@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { LineItem2, ShopifyOrderResponse } from '../../types/shopify';
+import { LineItem2, Refund, ShopifyOrderResponse } from '../../types/shopify';
 import { config } from '../config/config';
 import { axios } from '../middlewares/axios.middleware';
 import { logger } from '../middlewares/logger.middleware';
@@ -12,14 +12,15 @@ import {
 } from '../shared/dtos/product-variants.dto';
 
 class ShopifyService {
-    public async processNewOrderStock(order: ShopifyOrderResponse) {
-        console.info(`New Order ${order.id}`)
-        const orderItemsSharedSku = order.line_items.filter((orderItem) =>
-            this.isProductSharedSku(orderItem),
-        );
+    public async processOrderStock(order: ShopifyOrderResponse, incrementFlag: boolean = false) {
+        console.info(`New Order Request ${order.id} increment flag: ${incrementFlag}`);
+        const orderItemsSharedSku = order.line_items.filter((orderItem) => {
+            if (!incrementFlag) return this.isProductSharedSku(orderItem);
+            return this.itemsRefunded(order.refunds);
+        });
 
         if (!orderItemsSharedSku.length) {
-            console.info(`Order ${order.id} don't have items with shared sku`)
+            console.info(`Order ${order.id} don't have items with shared sku`);
             return;
         }
 
@@ -28,7 +29,7 @@ class ShopifyService {
                 orderItem.sku,
                 orderItem.product_id,
             );
-            this.updateProductInventoryAvailable(inventoryItem, orderItem.quantity, false);
+            this.updateProductInventoryAvailable(inventoryItem, orderItem.quantity, incrementFlag);
         }
     }
 
@@ -75,7 +76,7 @@ class ShopifyService {
         try {
             response = await axios.post(url, data, axiosConfig);
             if (response.data.data.errors) {
-                throw new Error(JSON.stringify(response.data.data));
+                throw new Error(JSON.stringify(response.data.data.errors));
             }
         } catch (e) {
             logger.error(
@@ -126,6 +127,24 @@ class ShopifyService {
             throw e;
         }
         return response.data;
+    }
+
+    protected itemsRefunded(orderRefunds: Refund[]): LineItem2[] {
+        if (!orderRefunds.length) {
+            return [];
+        }
+
+        const restockedRefunds = orderRefunds.filter((refund) => refund.restock);
+
+        if (!restockedRefunds.length) {
+            return [];
+        }
+        return restockedRefunds.flatMap((refund) =>
+            refund.refund_line_items.map((refundLine) => ({
+                ...refundLine.line_item,
+                quantity: refundLine.quantity,
+            })),
+        );
     }
 }
 

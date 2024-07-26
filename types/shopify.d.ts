@@ -85,7 +85,7 @@ export interface ShopifyOrderResponse {
     fulfillments: Fulfillment[];
     line_items: LineItem2[];
     payment_terms: PaymentTerms;
-    refunds: any[];
+    refunds: Refund[];
     shipping_address: any;
     shipping_lines: any[];
 }
@@ -485,3 +485,170 @@ export interface PaymentSchedule {
     created_at: string;
     updated_at: string;
 }
+
+  interface Shippingline {
+    id: number;
+    carrier_identifier: string;
+    code: string;
+    discounted_price: string;
+    discounted_price_set: Currentsubtotalpriceset;
+    is_removed: boolean;
+    phone?: any;
+    price: string;
+    price_set: Currentsubtotalpriceset;
+    requested_fulfillment_service_id?: any;
+    source: string;
+    title: string;
+    tax_lines: any[];
+    discount_allocations: any[];
+  }
+  export interface Refund {
+    id: number;
+    admin_graphql_api_id: string;
+    created_at: string;
+    note: string;
+    order_id: number;
+    processed_at: string;
+    restock: boolean;
+    total_duties_set: Currentsubtotalpriceset;
+    user_id: number;
+    order_adjustments: any[];
+    transactions: Transaction[];
+    refund_line_items: Refundlineitem[];
+    duties: any[];
+  }
+  export interface Refundlineitem {
+    id: number;
+    line_item_id: number;
+    location_id: number;
+    quantity: number;
+    restock_type: string;
+    subtotal: number;
+    subtotal_set: Currentsubtotalpriceset;
+    total_tax: number;
+    total_tax_set: Currentsubtotalpriceset;
+    line_item: Lineitem2;
+  }
+  interface Transaction {
+    id: number;
+    admin_graphql_api_id: string;
+    amount: string;
+    authorization?: any;
+    created_at: string;
+    currency: string;
+    device_id?: any;
+    error_code?: any;
+    gateway: string;
+    kind: string;
+    location_id?: any;
+    message: string;
+    order_id: number;
+    parent_id: number;
+    payment_id: string;
+    processed_at: string;
+    receipt: Receipt;
+    source_name: string;
+    status: string;
+    test: boolean;
+    user_id: number;
+    payment_details: Paymentdetails;
+  }
+  interface Paymentdetails {
+    credit_card_bin: string;
+    avs_result_code?: any;
+    cvv_result_code?: any;
+    credit_card_number: string;
+    credit_card_company: string;
+    buyer_action_info?: any;
+    credit_card_name: string;
+    credit_card_wallet?: any;
+    credit_card_expiration_month: number;
+    credit_card_expiration_year: number;
+    payment_method_name: string;
+  }
+  interface Receipt {
+    paid_amount: string;
+  }
+  
+  interface Property {
+    name: string;
+    value: string;
+  }
+  interface Customer {
+    id: number;
+    email: string;
+    created_at: string;
+    updated_at: string;
+    first_name?: any;
+    last_name: string;
+    state: string;
+    note?: any;
+    verified_email: boolean;
+    multipass_identifier?: any;
+    tax_exempt: boolean;
+    phone?: any;
+    email_marketing_consent: Emailmarketingconsent;
+    sms_marketing_consent?: any;
+    tags: string;
+    currency: string;
+    tax_exemptions: any[];
+    admin_graphql_api_id: string;
+    default_address: Defaultaddress;
+  }
+  interface Defaultaddress {
+    id: number;
+    customer_id: number;
+    first_name?: any;
+    last_name: string;
+    company?: any;
+    address1: string;
+    address2?: any;
+    city: string;
+    province: string;
+    country: string;
+    zip: string;
+    phone?: any;
+    name: string;
+    province_code: string;
+    country_code: string;
+    country_name: string;
+    default: boolean;
+  }
+  interface Emailmarketingconsent {
+    state: string;
+    opt_in_level: string;
+    consent_updated_at?: any;
+  }
+  interface Billingaddress {
+    first_name?: any;
+    address1: string;
+    phone?: any;
+    city: string;
+    zip: string;
+    province: string;
+    country: string;
+    last_name: string;
+    address2?: any;
+    company?: any;
+    latitude: number;
+    longitude: number;
+    name: string;
+    country_code: string;
+    province_code: string;
+  }
+  interface Currentsubtotalpriceset {
+    shop_money: Shopmoney;
+    presentment_money: Shopmoney;
+  }
+  interface Shopmoney {
+    amount: string;
+    currency_code: string;
+  }
+  interface Clientdetails {
+    accept_language: string;
+    browser_height?: any;
+    browser_ip: string;
+    browser_width?: any;
+    session_hash?: any;
+    user_agent: string;
+  }
