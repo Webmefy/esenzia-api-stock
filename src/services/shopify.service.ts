@@ -34,7 +34,7 @@ class ShopifyService {
 
     protected isProductSharedSku(orderItem: LineItem2): boolean {
         return orderItem.properties.some(
-            (property) => property.name === 'shared_sku' && property.value === 'true',
+            (property) => property.name === '_shared_sku' && property.value === 'true',
         );
     }
 
