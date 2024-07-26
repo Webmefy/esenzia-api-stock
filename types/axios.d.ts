@@ -1,5 +1,7 @@
-declare namespace Axios {
-    export interface AxiosXHRConfig {
-        reqId?: string;
+import 'axios';
+
+declare module 'axios' {
+    export interface InternalAxiosRequestConfig<D = any> {
+      reqId?: string;
     }
-}
+  }

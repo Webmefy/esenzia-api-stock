@@ -1,7 +1,7 @@
-import nativeAxios from 'axios';
+import nativeAxios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { randomUUID } from 'crypto';
 
-const axios: Axios.AxiosInstance = nativeAxios.create({
+const axios: AxiosInstance = nativeAxios.create({
     timeout: 120 * 1000, // 2 minutes
 });
 
@@ -22,7 +22,7 @@ class AxiosError extends Error {
     }
 }
 
-axios.interceptors.request.use((config) => {
+axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const customUuid = randomUUID();
     config.reqId = customUuid;
     const message = {

@@ -1,15 +1,13 @@
-import dotenv from 'dotenv';
 import express from 'express';
-import bodyParserMiddleware from './middlewares/bodyparser.middleware';
+import { config } from './config/config';
+import jsonParserMiddleware from './middlewares/jsonparser.middleware';
 import { requestLogger } from './middlewares/logger.middleware';
 import router from './routes';
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT;
 
-app.use(bodyParserMiddleware);
+app.use(jsonParserMiddleware);
 app.use(requestLogger);
 
 app.use('/api', router);
