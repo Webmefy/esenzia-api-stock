@@ -6,7 +6,7 @@ const apiVersion = '2024-07';
 
 export const config = {
     NODE_ENV: `${process.env.NODE_ENV}`,
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 80,
     SHOPIFY_STORE_NAME: storeName,
     SHOPIFY_ACCESS_TOKEN: `${process.env.SHOPIFY_ACCESS_TOKEN}`,
     SHOPIFY_SIGNING_SECRET: `${process.env.SHOPIFY_SIGNING_SECRET}`,
