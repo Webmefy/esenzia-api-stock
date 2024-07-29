@@ -1,7 +1,7 @@
 import express from 'express';
 import { config } from './config/config';
 import jsonParserMiddleware from './middlewares/jsonparser.middleware';
-import { requestLogger } from './middlewares/logger.middleware';
+import { logger, requestLogger } from './middlewares/logger.middleware';
 import router from './routes';
 
 const app = express();
@@ -13,5 +13,5 @@ app.use(requestLogger);
 app.use('/api', router);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    logger.info(`Server is running on http://localhost:${PORT}`);
 });

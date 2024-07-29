@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { config } from '../config/config';
+import { logger } from '../middlewares/logger.middleware';
 import cryptoService from '../services/crypto.service';
 import shopifyService from '../services/shopify.service';
 class ShopifyController {
@@ -17,7 +18,7 @@ class ShopifyController {
 
             shopifyService.processOrderStock(req.body);
         } catch (e) {
-            console.log('Error in handle new order ', e);
+            logger.info('Error in handle new order ', e);
             res.status(400).send(JSON.stringify(e));
         } finally {
             res.status(200).send('OK');
@@ -38,7 +39,7 @@ class ShopifyController {
 
             shopifyService.processOrderStock(req.body, true);
         } catch (e) {
-            console.log('Error in handle cancelled order ', e);
+            logger.info('Error in handle cancelled order ', e);
             res.status(400).send(JSON.stringify(e));
         } finally {
             res.status(200).send('OK');
@@ -58,7 +59,7 @@ class ShopifyController {
             }
             shopifyService.processRefundStock(req.body);
         } catch (e) {
-            console.log('Error in handle cancelled order ', e);
+            logger.info('Error in handle cancelled order ', e);
             res.status(400).send(JSON.stringify(e));
         } finally {
             res.status(200).send('OK');
