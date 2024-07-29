@@ -33,6 +33,17 @@ class ShopifyService {
         }
     }
 
+    public async processRefundStock(refund: Refund) {
+        const orderRefunded = {
+            id: refund.order_id,
+            line_items: refund.refund_line_items.map(
+                (refund_line_item) => refund_line_item.line_item,
+            ),
+            refunds: [refund],
+        } as ShopifyOrderResponse;
+        return this.processOrderStock(orderRefunded, true);
+    }
+
     protected isProductSharedSku(orderItem: LineItem2): boolean {
         return orderItem.properties.some(
             (property) => property.name === '_shared_sku' && property.value === 'true',

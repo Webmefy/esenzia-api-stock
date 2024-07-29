@@ -12,9 +12,21 @@ const logger = createLogger({
     transports: [new transports.Console(), new transports.File({ filename: 'combined.log' })],
 });
 
+const axiosLogger = createLogger({
+    level: 'info',
+    format: format.combine(
+        format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss',
+        }),
+        format.printf((info) => `${info.timestamp} axios ${info.level}: ${JSON.stringify(info.message, null, 2)}`),
+    ),
+    transports: [new transports.Console(), new transports.File({ filename: 'combined.log' })],
+});
+
 const requestLogger = (req: Request, res: Response, next: NextFunction): void => {
     logger.info(`${req.method} ${req.url} - Body: ${JSON.stringify(req.body)}`);
     next();
 };
 
-export { logger, requestLogger };
+export { axiosLogger, logger, requestLogger };
+

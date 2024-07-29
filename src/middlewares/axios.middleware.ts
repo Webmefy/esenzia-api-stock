@@ -1,5 +1,6 @@
 import nativeAxios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { randomUUID } from 'crypto';
+import { axiosLogger } from './logger.middleware';
 
 const axios: AxiosInstance = nativeAxios.create({
     timeout: 120 * 1000, // 2 minutes
@@ -31,8 +32,7 @@ axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
         config: config,
     };
 
-    //TODO: implement logger (winston?)
-    console.info(message);
+    axiosLogger.info(message);
     return config;
 });
 
@@ -48,7 +48,7 @@ axios.interceptors.response.use(
             logMessage: 'RESPONSE RECEIVED',
         };
 
-        console.info(message);
+        axiosLogger.info(message);
         return response;
     },
     (error) => {
@@ -72,7 +72,7 @@ axios.interceptors.response.use(
             headers: errorResponse.headers,
             logMessage: error.message || 'ERROR',
         };
-        console.error(message);
+        axiosLogger.error(message);
         return Promise.reject(new AxiosError(error.message, error));
     },
 );
