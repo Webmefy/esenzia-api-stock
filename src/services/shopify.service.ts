@@ -13,14 +13,14 @@ import {
 
 class ShopifyService {
     public async processOrderStock(order: ShopifyOrderResponse, incrementFlag: boolean = false) {
-        console.info(`New Order Request ${order.id} increment flag: ${incrementFlag}`);
+        logger.info(`New Order Request ${order.id} increment flag: ${incrementFlag}`);
         const orderItemsSharedSku = order.line_items.filter((orderItem) => {
             if (!incrementFlag) return this.isProductSharedSku(orderItem);
             return this.itemsRefunded(order.refunds);
         });
 
         if (!orderItemsSharedSku.length) {
-            console.info(`Order ${order.id} don't have items with shared sku`);
+            logger.info(`Order ${order.id} don't have items with shared sku`);
             return;
         }
 
@@ -90,7 +90,7 @@ class ShopifyService {
                 throw new Error(JSON.stringify(response.data.data.errors));
             }
         } catch (e) {
-            logger.error(
+            logger.info(
                 `Failed request finding inventory of product variants with sku ${sku} error: ${e}`,
             );
             throw e;
@@ -132,7 +132,7 @@ class ShopifyService {
                 throw new Error(JSON.stringify(response.data.errors));
             }
         } catch (e) {
-            logger.error(
+            logger.info(
                 `Failed request updating inventory available with product id ${inventoryItem.legacyResourceId} - sku ${inventoryItem.sku} error: ${e}`,
             );
             throw e;

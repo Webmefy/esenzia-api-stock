@@ -13,6 +13,7 @@ class ShopifyController {
                 hmac,
             );
             if (!hmacVerified) {
+                logger.info('Unauthorized');
                 res.status(401).send('Unauthorized');
             }
 
@@ -21,6 +22,7 @@ class ShopifyController {
             logger.info('Error in handle new order ', e);
             res.status(400).send(JSON.stringify(e));
         } finally {
+            logger.info('OK')
             res.status(200).send('OK');
         }
     }

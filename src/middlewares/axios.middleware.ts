@@ -72,7 +72,7 @@ axios.interceptors.response.use(
             headers: errorResponse.headers,
             logMessage: error.message || 'ERROR',
         };
-        axiosLogger.error(message);
+        axiosLogger.info(message);
         return Promise.reject(new AxiosError(error.message, error));
     },
 );
